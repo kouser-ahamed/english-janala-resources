@@ -4,6 +4,15 @@ const loadLesson = () => {
     .then((json) => dispayLesson(json.data)); //loadLessoning data to console
 };
 
+const removeActiveClass = () => {
+    const lessonButtons = document.querySelectorAll(".lesson-btn");
+    lessonButtons.forEach(btn => {
+        btn.classList.remove("active"); // removing active class from all the buttons
+    });
+
+}
+
+
 const loadLevelWord = (id) => {
   // console.log(id);
 
@@ -12,7 +21,15 @@ const loadLevelWord = (id) => {
 
   fetch(url)
     .then((res) => res.json())
-    .then((data) => displayLevelWords(data.data));
+    .then((data) => {
+        removeActiveClass(); // removing active class from all the buttons before adding to the clicked button
+
+        const clickedBtn = document.getElementById(`lesson-btn-${id}`);
+        clickedBtn.classList.add("active"); // adding active class to the clicked button
+
+
+        displayLevelWords(data.data)
+    });
 };
 
 const displayLevelWords = (words) => {
@@ -77,7 +94,7 @@ const dispayLesson = (lessons) => {
     const btnDiv = document.createElement("div");
     btnDiv.innerHTML = `
 
-        <button onclick="loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary"><i class="fa-solid fa-book-open"></i>Lesson - ${lesson.level_no}</button>
+        <button id="lesson-btn-${lesson.level_no}" onclick="loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary lesson-btn"><i class="fa-solid fa-book-open"></i>Lesson - ${lesson.level_no}</button>
 
         `;
 
